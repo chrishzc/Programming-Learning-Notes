@@ -5,3 +5,6 @@ GCP設定好了後，設定模型供應商Vertex AI | Google Cloud Platform
 2. 選擇Embedding模型
 3. 選擇索引模式等等設定
 4. 在模型內設定可呼叫
+# 拖拉式程式介面
+1. 設定輸入、輸出訊息
+2. 設定判斷條件，可以透過LLM進行判斷
