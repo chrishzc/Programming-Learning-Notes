@@ -36,6 +36,28 @@ git clone <遠端倉庫URL>
 
 本地版控流程通常在：**工作區 (Working Directory)** ➔ **暫存區 (Staging Area)** ➔ **本地倉庫 (Local Repository)** 之間進行。
 
+```mermaid
+flowchart LR
+    WD["工作區<br>(Working Directory)"]
+    SA["暫存區<br>(Staging Area)"]
+    LR["本地倉庫<br>(Local Repository)"]
+    RR["遠端倉庫<br>(Remote Repository)"]
+
+    %% Git Commands Flow
+    WD ==>|"git add"| SA
+    SA ==>|"git commit"| LR
+    LR ==>|"git push"| RR
+
+    %% Git Undo Flow
+    SA -.->|"git restore --staged"| WD
+    LR -.->|"git reset --soft"| SA
+    LR -.->|"git reset --hard"| WD
+    WD -.->|"git restore (放棄修改)"| WD
+
+    %% Git Sync Flow
+    RR ==>|"git pull / git clone"| WD
+```
+
 | 指令                          | 說明                               |
 | :-------------------------- | :------------------------------- |
 | `git status`                | 檢查當前工作區與暫存區的檔案狀態（新增、修改、刪除）       |
