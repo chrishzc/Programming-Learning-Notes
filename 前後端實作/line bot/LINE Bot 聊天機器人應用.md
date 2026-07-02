@@ -38,7 +38,7 @@
 
 **ngrok** 是一套可以快速將本機服務暴露至公網的穿透工具，免去配置固定 IP、連接埠 (Port) 轉發與網域 (Domain) 的繁瑣程序。
 
-1. **下載與安裝**：安裝 ngrok 後，在終端機輸入官網給予的授權 Token 進行驗證：
+1. **下載與安裝**：安裝 ngrok 後，第一次啟動時在終端機輸入官網給予的授權 Token 進行驗證(輸入過後就不用再輸入了，==另外每次開機時要重啟ngrok.exe開啟伺服器==)：
    ```bash
    ngrok config add-authtoken <Your_Authtoken>
    ```
