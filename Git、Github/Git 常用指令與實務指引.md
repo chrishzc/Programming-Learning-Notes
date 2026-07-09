@@ -141,15 +141,15 @@ flowchart LR
 
 ### 1. 修改撤銷與復原
 
-| 指令 | 說明 |
-| :--- | :--- |
-| `git restore <file>` | 放棄工作區中未暫存的修改（還原到最近一次 commit 或暫存狀態） |
-| `git restore --staged <file>` | 將檔案從暫存區移回工作區（等同於取消 `git add`） |
-| `git commit --amend` | 修改最後一次的 commit 訊息或追加檔案至最近一次 commit |
-| `git reset --soft HEAD~1` | 撤銷最近一次 commit，但保留工作區與暫存區的修改代碼（安全回退） |
-| `git reset --hard HEAD~1` | 撤銷最近一次 commit，且**徹底丟棄**該次 commit 以後的所有代碼修改 |
-| `git reset --hard <commit_id>`| 將本地倉庫強制回退至指定的歷史 commit 版本 |
-| `git revert <commit_id>` | 以新增一個 commit 的方式來撤銷指定 commit 的修改（適用於已 push 的歷史） |
+| 指令                             | 說明                                              |
+| :----------------------------- | :---------------------------------------------- |
+| `git restore <file>`           | 放棄工作區中未暫存的修改（還原到最近一次 commit 或暫存狀態）              |
+| `git restore --staged <file>`  | 將檔案從暫存區移回工作區（等同於取消 `git add`）                   |
+| `git commit --amend`           | 修改最後一次的 commit 訊息或追加檔案至最近一次 commit              |
+| `git reset --soft HEAD~1`      | 撤銷最近一次 commit，但保留工作區與暫存區的修改代碼（安全回退）             |
+| `git reset --hard HEAD~1`      | 撤銷最近一次 commit，且**徹底丟棄**該次 commit 以後的所有代碼修改      |
+| `git reset --hard <commit_id>` | 將本地倉庫強制回退至指定的歷史 commit 版本                       |
+| `git revert <commit_id>`       | 以新增一個 commit 的方式來撤銷指定 commit 的修改（適用於已 push 的歷史） |
 
 ### 2. 衝突解決
 當合併分支（如 `git merge`）時，若兩分支修改了同一個檔案的同一行，會產生衝突：
