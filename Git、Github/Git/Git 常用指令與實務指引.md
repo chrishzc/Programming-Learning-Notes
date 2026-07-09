@@ -1,7 +1,41 @@
 # Git 常用指令與實務指引
 
 > [!ABSTRACT]
-> 本章整理版本控制工具 Git 的核心概念與常用命令速查表，涵蓋環境設定、本地版控工作流、分支管理、遠端協作以及版本回退等常用實務操作。
+> 本章整理版本控制工具 Git 的核心概念與常用命令速查表，涵蓋 SSH 金鑰設定、環境初始化、本地版控工作流、分支管理、遠端協作以及版本回退等常用實務操作。
+
+---
+
+## 零、 SSH 金鑰設定（只需做一次）
+
+SSH 金鑰讓你的電腦與 GitHub 之間能進行加密認證，設定好後 Push / Pull 就不需要每次輸入密碼。
+
+### 1. 生成 SSH 金鑰
+```bash
+# 生成 Ed25519 金鑰（推薦）；-C 後面填你的 GitHub 帳號信箱
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# 一路按 Enter 採用預設路徑與無密碼保護即可
+# 金鑰檔案會產生在 ~/.ssh/id_ed25519（私鑰）與 ~/.ssh/id_ed25519.pub（公鑰）
+```
+
+### 2. 將公鑰加入 GitHub
+```bash
+# 複製公鑰內容（Windows）
+type %USERPROFILE%\.ssh\id_ed25519.pub | clip
+
+# 複製公鑰內容（Mac / Linux）
+cat ~/.ssh/id_ed25519.pub | pbcopy
+```
+接著進入 GitHub → 右上角頭像 → **Settings** → **SSH and GPG keys** → **New SSH key**，貼上公鑰內容並儲存。
+
+### 3. 驗證連線是否成功
+```bash
+ssh -T git@github.com
+# 看到 "Hi username! You've successfully authenticated..." 即代表設定成功
+```
+
+> [!IMPORTANT]
+> Clone 時請選擇 **SSH** 格式的網址（`git@github.com:user/repo.git`）而非 HTTPS，才能使用金鑰認證。
 
 ---
 
@@ -59,15 +93,15 @@ flowchart LR
 ```
 
 | 指令                          | 說明                               |
-| :-------------------------- | :------------------------------- |
-| `git status`                | 檢查當前工作區與暫存區的檔案狀態（新增、修改、刪除）       |
-| `git add <file>`            | 將指定檔案的變更加入暫存區                    |
-| `git add .`                 | ==將當前目錄下所有修改與新增的檔案一次性加入暫存區==     |
-| `git commit -m "msg"`       | ==將暫存區的變更提交到本地倉庫，並附上提交訊息==       |
-| `git commit -am "msg"`      | 直接將所有「已追蹤並修改」的檔案加入暫存並提交（不適用於新檔案） |
-| `git diff`                  | 查看工作區與暫存區之間的代碼差異                 |
-| `git log`                   | 查看詳細歷史提交紀錄                       |
-| `git log --oneline --graph` | 以單行與圖形化線條簡潔呈現分支歷史紀錄              |
+| :---------------------------- | :--------------------------------- |
+| `git status`                  | 檢查當前工作區與暫存區的檔案狀態（新增、修改、刪除）       |
+| `git add <file>`              | 將指定檔案的變更加入暫存區                    |
+| `git add .`                   | ==將當前目錄下所有修改與新增的檔案一次性加入暫存區==     |
+| `git commit -m "msg"`         | ==將暫存區的變更提交到本地倉庫，並附上提交訊息==       |
+| `git commit -am "msg"`        | 直接將所有「已追蹤並修改」的檔案加入暫存並提交（不適用於新檔案） |
+| `git diff`                    | 查看工作區與暫存區之間的代碼差異                 |
+| `git log`                     | 查看詳細歷史提交紀錄                       |
+| `git log --oneline --graph`   | 以單行與圖形化線條簡潔呈現分支歷史紀錄              |
 
 ### 1. git commit 指令進階細節
 
@@ -92,15 +126,15 @@ flowchart LR
 分支是 Git 的核心功能，讓開發者能平行開發不同功能而互不干擾。
 
 | 指令                       | 說明                                         |
-| :----------------------- | :----------------------------------------- |
-| `git branch`             | 列出本地所有分支，並標註當前所在分支                         |
-| `git branch -a`          | 列出本地與遠端的所有分支                               |
-| `git branch <name>`      | ==建立一個名為 `<name>` 的新分支（但不切換）==             |
-| `git checkout <name>`    | ==切換至指定分支（新版本推薦使用 `git switch <name>`）==   |
-| `git checkout -b <name>` | 建立新分支並立即切換過去（新版本推薦 `git switch -c <name>`） |
-| `git merge <name>`       | 將指定的 `<name>` 分支代碼合併到「當前所在分支」              |
-| `git branch -d <name>`   | 刪除已合併的本地分支                                 |
-| `git branch -D <name>`   | 強制刪除未合併的本地分支                               |
+| :------------------------- | :------------------------------------------- |
+| `git branch`               | 列出本地所有分支，並標註當前所在分支                         |
+| `git branch -a`            | 列出本地與遠端的所有分支                               |
+| `git branch <name>`        | ==建立一個名為 `<name>` 的新分支（但不切換）==             |
+| `git checkout <name>`      | ==切換至指定分支（新版本推薦使用 `git switch <name>`）==   |
+| `git checkout -b <name>`   | 建立新分支並立即切換過去（新版本推薦 `git switch -c <name>`） |
+| `git merge <name>`         | 將指定的 `<name>` 分支代碼合併到「當前所在分支」              |
+| `git branch -d <name>`     | 刪除已合併的本地分支                                 |
+| `git branch -D <name>`     | 強制刪除未合併的本地分支                               |
 
 ---
 
@@ -109,13 +143,13 @@ flowchart LR
 用於本地倉庫與 GitHub / GitLab 等遠端伺服器的同步協作。
 
 | 指令                            | 說明                                             |
-| :---------------------------- | :--------------------------------------------- |
-| `git remote -v`               | 查看當前連結的遠端倉庫地址與名稱（通常預設為 `origin`）               |
-| `git remote add origin <URL>` | 將本地倉庫連結至指定的遠端倉庫地址                              |
-| `git push -u origin <branch>` | 將本地分支推送到遠端，並設定預設追蹤（後續只需打 `git push`）           |
-| `git push`                    | ==將本地提交推送到已綁定追蹤的遠端分支==                         |
-| `git fetch`                   | ==從遠端拉取最新的變更紀錄，但不自動合併到本地工作分支==                 |
-| `git pull`                    | ==從遠端拉取最新代碼並「自動合併」至當前本地分支（相當於 fetch + merge）== |
+| :------------------------------ | :----------------------------------------------- |
+| `git remote -v`                 | 查看當前連結的遠端倉庫地址與名稱（通常預設為 `origin`）               |
+| `git remote add origin <URL>`   | 將本地倉庫連結至指定的遠端倉庫地址                              |
+| `git push -u origin <branch>`   | 將本地分支推送到遠端，並設定預設追蹤（後續只需打 `git push`）           |
+| `git push`                      | ==將本地提交推送到已綁定追蹤的遠端分支==                         |
+| `git fetch`                     | ==從遠端拉取最新的變更紀錄，但不自動合併到本地工作分支==                 |
+| `git pull`                      | ==從遠端拉取最新代碼並「自動合併」至當前本地分支（相當於 fetch + merge）== |
 
 ### 1. git push 參數與推動規則
 
@@ -142,14 +176,14 @@ flowchart LR
 ### 1. 修改撤銷與復原
 
 | 指令                             | 說明                                              |
-| :----------------------------- | :---------------------------------------------- |
-| `git restore <file>`           | 放棄工作區中未暫存的修改（還原到最近一次 commit 或暫存狀態）              |
-| `git restore --staged <file>`  | 將檔案從暫存區移回工作區（等同於取消 `git add`）                   |
-| `git commit --amend`           | 修改最後一次的 commit 訊息或追加檔案至最近一次 commit              |
-| `git reset --soft HEAD~1`      | 撤銷最近一次 commit，但保留工作區與暫存區的修改代碼（安全回退）             |
-| `git reset --hard HEAD~1`      | 撤銷最近一次 commit，且**徹底丟棄**該次 commit 以後的所有代碼修改      |
-| `git reset --hard <commit_id>` | 將本地倉庫強制回退至指定的歷史 commit 版本                       |
-| `git revert <commit_id>`       | 以新增一個 commit 的方式來撤銷指定 commit 的修改（適用於已 push 的歷史） |
+| :------------------------------- | :------------------------------------------------ |
+| `git restore <file>`             | 放棄工作區中未暫存的修改（還原到最近一次 commit 或暫存狀態）              |
+| `git restore --staged <file>`    | 將檔案從暫存區移回工作區（等同於取消 `git add`）                   |
+| `git commit --amend`             | 修改最後一次的 commit 訊息或追加檔案至最近一次 commit              |
+| `git reset --soft HEAD~1`        | 撤銷最近一次 commit，但保留工作區與暫存區的修改代碼（安全回退）             |
+| `git reset --hard HEAD~1`        | 撤銷最近一次 commit，且**徹底丟棄**該次 commit 以後的所有代碼修改      |
+| `git reset --hard <commit_id>`   | 將本地倉庫強制回退至指定的歷史 commit 版本                       |
+| `git revert <commit_id>`         | 以新增一個 commit 的方式來撤銷指定 commit 的修改（適用於已 push 的歷史） |
 
 ### 2. 衝突解決
 當合併分支（如 `git merge`）時，若兩分支修改了同一個檔案的同一行，會產生衝突：
@@ -167,3 +201,47 @@ flowchart LR
    git add <衝突檔案>
    git commit -m "Fix merge conflict"
    ```
+
+---
+
+## 六、 新專案建立完整流程 (From Zero)
+
+這是新手最常需要但最容易卡住的完整步驟，從頭開始建立一個與 GitHub 連動的新專案。
+
+### 方式 A：GitHub 先建，本地 clone（推薦新手）
+```bash
+# 1. 在 GitHub 上建立新 Repo（勾選 Add README），複製 SSH 網址後
+
+# 2. 在本地 clone 下來（已自動設定好 remote origin）
+git clone git@github.com:your-username/your-repo-name.git
+
+# 3. 進入專案資料夾，正常開發後 push
+cd your-repo-name
+# ... 撰寫程式碼 ...
+git add .
+git commit -m "feat: initial setup"
+git push
+```
+
+### 方式 B：本地先建，再推上 GitHub
+```bash
+# 1. 在本地初始化
+git init
+git add .
+git commit -m "feat: initial commit"
+
+# 2. 在 GitHub 上建立空的新 Repo（不要勾選 README）
+
+# 3. 連結遠端並推送
+git remote add origin git@github.com:your-username/your-repo-name.git
+git branch -M main        # 確保主分支名稱為 main
+git push -u origin main   # 第一次推送，-u 建立追蹤連結
+```
+
+> [!NOTE]
+> 完成一次 `git push -u origin main` 後，之後的日常開發只需要三個指令：
+> ```bash
+> git add .
+> git commit -m "描述這次的修改"
+> git push
+> ```
