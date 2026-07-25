@@ -70,7 +70,7 @@ Client → [Proxy] → Internet          Internet → [Proxy] → Backend A
 | **安全標頭注入** | 統一注入 CSP、HSTS 等標頭    | XSS、Clickjacking、MIME 探測 |
 | **高可用保障**  | 後端健康檢查、自動摘除故障節點      | DDoS 導致全服務中斷             |
 
-> **Nginx 不是萬能的**：邏輯漏洞（SQL Injection、IDOR、業務邏輯缺陷）反向代理無法攔截，那是應用層的責任。
+> **Nginx 不是萬能的**：==邏輯漏洞（SQL Injection、IDOR、業務邏輯缺陷）反向代理無法攔截==，那是應用層的責任。
 
 ---
 
